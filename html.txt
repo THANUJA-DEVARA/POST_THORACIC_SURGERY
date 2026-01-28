@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Expectancy Post Thoracic Surgery - ML Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #4b79a1;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #4b79a1;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4b79a1;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>One year life expectancy post thoracic surgery using streamlit</h1>
+    <p>Using Machine Learning</p>
+</header>
+
+<div class="container">
+    <h2>Project Overview</h2>
+    <p>
+        This project uses Machine Learning to predict the 1-year life expectancy of patients following thoracic surgery. The model is trained using real-world medical data to assist healthcare professionals in making informed decisions.
+    </p>
+
+    <h2>Key Features:</h2>
+    <ul>
+        <li>Predict 1-year survival probability</li>
+        <li>Trained on thoracic surgery dataset</li>
+        <li>Utilizes supervised machine learning techniques</li>
+        <li>Helps in clinical decision support</li>
+    </ul>
+
+    <h2>Technologies Used:</h2>
+    <ul>
+        <li>Python</li>
+        <li>Pandas, NumPy, Scikit-learn</li>
+        <li>Matplotlib, Seaborn</li>
+    </ul>
+
+    <h2>Download Project</h2>
+    <p>
+        You can download the project files or view the Jupyter Notebook using the links below:
+    </p>
+    <a class="button" href="#">Download Notebook (.ipynb)</a>
+    <a class="button" href="#">View GitHub Repository</a>
+</div>
+
+<footer>
+    &copy; 2025 Life Expectancy ML Project. All rights reserved.
+</footer>
+
+</body>
+</html>
