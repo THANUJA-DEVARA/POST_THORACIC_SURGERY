@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Screening System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+    }
+
+    .main-content {
+      padding: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #333;
+      font-size: 1.1em;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      resize: vertical;
+      min-height: 120px;
+      transition: border-color 0.3s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .file-upload-area {
+      border: 3px dashed #667eea;
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .file-upload-area.dragover {
+      background: rgba(102, 126, 234, 0.1);
+      border-color: #764ba2;
+      transform: scale(1.02);
+    }
+
+    #fileInput {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+
+    .upload-icon {
+      font-size: 3em;
+      color: #667eea;
+      margin-bottom: 20px;
+    }
+
+    .upload-text {
+      font-size: 1.2em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .upload-subtext {
+      color: #999;
+      font-size: 0.9em;
+    }
+
+    .file-list {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .file-name {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .file-size {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    .remove-btn {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8em;
+      transition: background 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      background: #ff3742;
+    }
+
+    .analyze-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 30px auto;
+    }
+
+    .analyze-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .analyze-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .results-section {
+      margin-top: 40px;
+      display: none;
+    }
+
+    .results-header {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .result-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .candidate-info {
+      flex: 1;
+    }
+
+    .candidate-name {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .match-score {
+      font-size: 1.1em;
+      font-weight: 600;
+    }
+
+    .score-excellent { color: #27ae60; }
+    .score-good { color: #f39c12; }
+    .score-fair { color: #e74c3c; }
+
+    .score-bar {
+      width: 100px;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-left: 20px;
+    }
+
+    .score-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #667eea;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎯 Resume Screening System</h1>
+      <p>AI-powered candidate matching with machine learning</p>
+    </div>
+
+    <div class="main-content">
+      <div class="form-group">
+        <label for="jobDescription">Job Description</label>
+        <textarea id="jobDescription" placeholder="Enter the job description here..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Upload Resume Files (PDF format)</label>
+        <div class="file-upload-area" id="fileUploadArea">
+          <input type="file" id="fileInput" multiple accept=".pdf">
+          <div class="upload-icon">📄</div>
+          <div class="upload-text">Click to upload or drag and drop</div>
+          <div class="upload-subtext">Support for multiple PDF files</div>
+        </div>
+        <div class="file-list" id="fileList"></div>
+      </div>
+
+      <button class="analyze-btn" id="analyzeBtn" disabled>🔍 Analyze Resumes</button>
+
+      <div class="results-section" id="resultsSection">
+        <div class="results-header">📊 Matching Results</div>
+        <div id="resultsContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class ResumeScreeningApp {
+      constructor() {
+        this.files = [];
+        this.initializeEventListeners();
+      }
+
+      initializeEventListeners() {
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+
+        fileInput.addEventListener('change', (e) => this.handleFiles(e.target.files));
+
+        fileUploadArea.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          fileUploadArea.classList.add('dragover');
+        });
+
+        fileUploadArea.addEventListener('dragleave', () => {
+          fileUploadArea.classList.remove('dragover');
+        });
+
+        fileUploadArea.addEventListener('drop', (e) => {
+          e.preventDefault();
+          fileUploadArea.classList.remove('dragover');
+          this.handleFiles(e.dataTransfer.files);
+        });
+
+        analyzeBtn.addEventListener('click', () => this.analyzeResumes());
+
+        document.getElementById('jobDescription').addEventListener('input', () => {
+          this.updateAnalyzeButton();
+        });
+      }
+
+      handleFiles(fileList) {
+        const validFiles = Array.from(fileList).filter(file => file.type === 'application/pdf');
+        if (validFiles.length === 0) {
+          alert('Please select PDF files only.');
+          return;
+        }
+        this.files = [...this.files, ...validFiles];
+        this.updateFileList();
+        this.updateAnalyzeButton();
+      }
+
+      updateFileList() {
+        const fileListContainer = document.getElementById('fileList');
+        if (this.files.length === 0) {
+          fileListContainer.style.display = 'none';
+          return;
+        }
+
+        fileListContainer.style.display = 'block';
+        fileListContainer.innerHTML = this.files.map((file, index) => `
+          <div class="file-item">
+            <div>
+              <div class="file-name">${file.name}</div>
+              <div class="file-size">${this.formatFileSize(file.size)}</div>
+            </div>
+            <button class="remove-btn" onclick="app.removeFile(${index})">Remove</button>
+          </div>
+        `).join('');
+      }
+
+      removeFile(index) {
+        this.files.splice(index, 1);
+        this.updateFileList();
+        this.updateAnalyzeButton();
+      }
+
+      formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+
+      updateAnalyzeButton() {
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const jobDescription = document.getElementById('jobDescription').value.trim();
+        analyzeBtn.disabled = this.files.length === 0 || !jobDescription;
+      }
+
+      async analyzeResumes() {
+        const jobDescription = document.getElementById('jobDescription').value.trim();
+        if (!jobDescription) {
+          alert('Please enter a job description.');
+          return;
+        }
+
+        if (this.files.length === 0) {
+          alert('Please upload at least one resume.');
+          return;
+        }
+
+        this.showLoading();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const results = await this.generateMockResults(jobDescription);
+        this.displayResults(results);
+      }
+
+      extractKeywords(text) {
+        const commonKeywords = ['java', 'python', 'ml', 'ai', 'developer', 'engineer'];
+        const words = text.toLowerCase().split(/\W+/);
+        return words.filter(word => commonKeywords.includes(word));
+      }
+
+      calculateMockScore(fileName, keywords) {
+        let score = Math.random() * 0.4 + 0.3;
+        const lower = fileName.toLowerCase();
+        if (lower.includes('java')) score += 0.1;
+        if (lower.includes('ml')) score += 0.1;
+        return Math.min(Math.max(score, 0), 1);
+      }
+
+      extractNameFromFile(fileName) {
+        let name = fileName.replace(/\.(pdf|docx?)$/i, '').replace(/[_-]/g, ' ').replace(/resume|cv/gi, '').trim();
+        return name.replace(/\b\w/g, l => l.toUpperCase()) || 'Unknown Candidate';
+      }
+
+      async generateMockResults(description) {
+        const keywords = this.extractKeywords(description);
+        return this.files.map(file => ({
+          name: this.extractNameFromFile(file.name),
+          score: this.calculateMockScore(file.name, keywords)
+        })).sort((a, b) => b.score - a.score);
+      }
+
+      showLoading() {
+        const resultsSection = document.getElementById('resultsSection');
+        const resultsContainer = document.getElementById('resultsContainer');
+        resultsSection.style.display = 'block';
+        resultsContainer.innerHTML = '<div class="loading">Analyzing resumes...</div>';
+      }
+
+      displayResults(results) {
+        const container = document.getElementById('resultsContainer');
+        if (!results.length) {
+          container.innerHTML = '<div class="no-results">No results found.</div>';
+          return;
+        }
+        container.innerHTML = results.map(res => `
+          <div class="result-item">
+            <div class="candidate-info">
+              <div class="candidate-name">${res.name}</div>
+              <div class="match-score ${this.getScoreClass(res.score)}">
+                Match Score: ${(res.score * 100).toFixed(1)}%
+              </div>
+            </div>
+            <div class="score-bar">
+              <div class="score-fill ${this.getScoreClass(res.score)}" style="width: ${(res.score * 100).toFixed(1)}%; background-color: ${this.getScoreColor(res.score)};"></div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      getScoreClass(score) {
+        if (score >= 0.7) return 'score-excellent';
+        if (score >= 0.5) return 'score-good';
+        return 'score-fair';
+      }
+
+      getScoreColor(score) {
+        if (score >= 0.7) return '#27ae60';
+        if (score >= 0.5) return '#f39c12';
+        return '#e74c3c';
+      }
+    }
+
+    const app = new ResumeScreeningApp();
+  </script>
+</body>
+</html>
